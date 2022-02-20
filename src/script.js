@@ -21,27 +21,19 @@ const setNextImage = (file) => {
 /**
  * Prevent browser default handling.
  */
-document.body.addEventListener(
-  "dragover",
-  (event) => {
-    event.preventDefault();
-  },
-  false
-);
+document.body.addEventListener("dragover", (event) => {
+  event.preventDefault();
+});
 
 /**
  * Handle file drop.
  */
-document.body.addEventListener(
-  "drop",
-  (event) => {
-    event.preventDefault();
-    for (const file of event.dataTransfer.files) {
-      setNextImage(file);
-    }
-  },
-  false
-);
+document.body.addEventListener("drop", (event) => {
+  event.preventDefault();
+  for (const file of event.dataTransfer.files) {
+    setNextImage(file);
+  }
+});
 
 /**
  * Handle file paste.
