@@ -31,7 +31,3 @@ img {
   position: absolute;
   pointer-events: none;
 }
-
-.dropzone {
-  background-color: fuchsia;
-}
