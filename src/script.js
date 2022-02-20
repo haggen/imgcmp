@@ -63,3 +63,11 @@ document.body.addEventListener("mousemove", (event) => {
   );
   target.style.clipPath = `inset(0 ${target.offsetWidth - clampedX}px 0 0)`;
 });
+
+/**
+ * Enable hot reloading.
+ * @see https://parceljs.org/features/development/#hot-reloading
+ */
+if (typeof module !== "undefined" && module.hot) {
+  module.hot.accept();
+}
