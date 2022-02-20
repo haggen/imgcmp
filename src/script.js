@@ -57,6 +57,13 @@ document.body.addEventListener("mousemove", (event) => {
 });
 
 /**
+ * Don't show instructions if JavaScript is disabled.
+ */
+document.body.prepend(
+  document.createTextNode("Drop or paste images to compare.")
+);
+
+/**
  * Enable hot reloading.
  * @see https://parceljs.org/features/development/#hot-reloading
  */
