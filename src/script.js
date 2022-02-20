@@ -5,9 +5,6 @@ let nextImageIndex = 0;
  * @param {File} file
  */
 const setNextImage = (file) => {
-  if (!/image.*/.test(file.type)) {
-    throw new Error("Not an image");
-  }
   const image = document.images[nextImageIndex];
   const src = URL.createObjectURL(file);
   image.onload = () => {
@@ -16,6 +13,23 @@ const setNextImage = (file) => {
   image.src = src;
 
   nextImageIndex = (nextImageIndex + 1) % document.images.length;
+};
+
+/**
+ * Handle data transfer from any event.
+ * @param {DataTransfer} data
+ */
+const handleDataTransfer = (data) => {
+  // If we transfer more than 1 file we need to preserver the order.
+  if (data.files.length > 1) {
+    nextImageIndex = 0;
+  }
+  for (const file of data.files) {
+    if (!/image.*/.test(file.type)) {
+      throw new Error("Not an image");
+    }
+    setNextImage(file);
+  }
 };
 
 /**
@@ -30,18 +44,14 @@ document.body.addEventListener("dragover", (event) => {
  */
 document.body.addEventListener("drop", (event) => {
   event.preventDefault();
-  for (const file of event.dataTransfer.files) {
-    setNextImage(file);
-  }
+  handleDataTransfer(event.dataTransfer);
 });
 
 /**
  * Handle file paste.
  */
 document.addEventListener("paste", (event) => {
-  for (const file of event.clipboardData.files) {
-    setNextImage(file);
-  }
+  handleDataTransfer(event.clipboardData);
 });
 
 /**
