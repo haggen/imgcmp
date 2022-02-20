@@ -1,39 +1,40 @@
-let nextImageIndex = 0;
+let nextImageId = 0;
 
 /**
- * Update next image with given file and bump the index.
+ * Update image with given file and bump next id.
  * @param {File} file
  */
-const setNextImage = (file) => {
-  const image = document.images[nextImageIndex];
+function updateNextImage(file) {
+  const image = document.images[nextImageId];
   const src = URL.createObjectURL(file);
   image.onload = () => {
+    // Gotta dispose of URL object manually, otherwise memory leaks.
     URL.revokeObjectURL(src);
   };
   image.src = src;
 
-  nextImageIndex = (nextImageIndex + 1) % document.images.length;
-};
+  nextImageId = (nextImageId + 1) % document.images.length;
+}
 
 /**
  * Handle data transfer from any event.
  * @param {DataTransfer} data
  */
-const handleDataTransfer = (data) => {
-  // If we transfer more than 1 file we need to preserver the order.
+function handleDataTransfer(data) {
+  // If we're transfering more than 1 we should reset the order, so the first image alawys stays under the second.
   if (data.files.length > 1) {
-    nextImageIndex = 0;
+    nextImageId = 0;
   }
   for (const file of data.files) {
     if (!/image.*/.test(file.type)) {
       throw new Error("Not an image");
     }
-    setNextImage(file);
+    updateNextImage(file);
   }
-};
+}
 
 /**
- * Prevent browser default handling.
+ * Prevent browser's default handling.
  */
 document.body.addEventListener("dragover", (event) => {
   event.preventDefault();
@@ -51,6 +52,7 @@ document.body.addEventListener("drop", (event) => {
  * Handle file paste.
  */
 document.addEventListener("paste", (event) => {
+  event.preventDefault();
   handleDataTransfer(event.clipboardData);
 });
 
@@ -67,11 +69,13 @@ document.body.addEventListener("mousemove", (event) => {
 });
 
 /**
- * Don't show instructions if JavaScript is disabled.
+ * Show nothing if we don't have JavaScript.
  */
 document.body.prepend(
   document.createTextNode("Drop or paste images to compare.")
 );
+document.body.appendChild(new Image());
+document.body.appendChild(new Image());
 
 /**
  * Enable hot reloading.
