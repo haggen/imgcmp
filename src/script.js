@@ -48,6 +48,12 @@ document.body.addEventListener(
   false
 );
 
+document.addEventListener("paste", (event) => {
+  for (const file of event.clipboardData.files) {
+    setNextImage(file);
+  }
+});
+
 document.body.addEventListener("mousemove", (event) => {
   const target = document.images[1];
   const clampedRelativeX = Math.min(
