@@ -1,0 +1,37 @@
+:not(svg) {
+  all: unset; /* Use initial spec values. */
+  display: revert; /* Revert to browser's default. */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+html {
+  font: 16px/1.5 sans-serif;
+}
+
+body {
+  position: relative;
+}
+
+img {
+  display: block;
+  inset: 0;
+  margin: auto;
+  max-width: 100%;
+  object-fit: contain;
+  position: absolute;
+  pointer-events: none;
+}
+
+.dropzone {
+  background-color: fuchsia;
+}
